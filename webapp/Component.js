@@ -21,7 +21,7 @@ sap.ui.define([
 				var rendererPromise = this._getRenderer();
 				rendererPromise.then(function (oRenderer) {
 					this.openWhatsNewNow();
-					oRenderer.addHeaderItem({
+					this._headerItem = oRenderer.addHeaderItem({
 						icon: "sap-icon://newspaper",
 						tooltip: "News!",
 						press: this.openOverview.bind(this)
@@ -35,7 +35,7 @@ sap.ui.define([
 				var rendererPromise = this._getRenderer();
 				rendererPromise.then(function (oRenderer) {
 					this.openWhatsNewNow();
-					oRenderer.addHeaderItem({
+					this._headerItem = oRenderer.addHeaderItem({
 						icon: "sap-icon://newspaper",
 						tooltip: "News!",
 						press: this.openOverview.bind(this)
@@ -157,6 +157,18 @@ sap.ui.define([
 				}
 			}
 			return oDeferred.promise();
-		}
+		},
+		destroy: function(){
+			//remove the header item you added
+			
+			var rendererPromise = this._getRenderer();
+			rendererPromise.then(function (oRenderer) {
+				oRenderer.hideHeaderItem([this._headerItem.getId()]);
+				this._headerItem.destroy();
+			}.bind(this));
+
+            Component.prototype.destroy.apply(this,arguments);
+        }
+
 	});
 });
